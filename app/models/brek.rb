@@ -1,0 +1,2 @@
+class Brek < ApplicationRecord
+end

@@ -7,4 +7,21 @@ RSpec.describe BrekkiesController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
+
+  describe "brekkies#new action" do
+    it "should successfully show the new form" do
+      get :new
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "brekkies#create action" do
+    it "should successfully create a new brekkie in our database" do
+      post :create, params: { brek: { message: 'Hello' } }
+      expect(response).to redirect_to root_path
+
+      brek = Brek.last
+      expect(brek.message).to eq('Hello')
+    end
+  end
 end
