@@ -77,3 +77,5 @@ end
 gem "geocoder"
 
 gem 'simple_form'
+
+gem 'devise'
