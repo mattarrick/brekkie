@@ -1,12 +1,19 @@
 class BrekkiesController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
-  
+
   def new
     @brek = Brek.new
   end
 
   def index
 
+  end
+
+  def show
+    @brek = Brek.find_by_id(params[:id])
+    if @brek.blank?
+      render plain: 'Not Found :(', status: :not_found
+    end
   end
 
   def create
