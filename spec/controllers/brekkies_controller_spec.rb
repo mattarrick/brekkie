@@ -23,5 +23,11 @@ RSpec.describe BrekkiesController, type: :controller do
       brek = Brek.last
       expect(brek.message).to eq('Hello')
     end
+
+    it "should properly deal with vaildation errors" do
+      post :create, params: { brek: { message: '' } }
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(Brek.count).to eq 0
+    end
   end
 end
