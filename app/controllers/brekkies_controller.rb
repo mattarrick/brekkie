@@ -1,9 +1,11 @@
 class BrekkiesController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
   def destroy
     @brek = Brek.find_by_id(params[:id])
     return render_not_found if @brek.blank?
+    return render_not_found(:forbidden) if @brek.user != current_user
+
     @brek.destroy
     redirect_to root_path
   end
@@ -11,6 +13,7 @@ class BrekkiesController < ApplicationController
   def update
     @brek = Brek.find_by_id(params[:id])
     return render_not_found if @brek.blank?
+    return render_not_found(:forbidden) if @brek.user != current_user
 
     @brek.update_attributes(brek_params)
     if @brek.valid?
@@ -36,6 +39,7 @@ class BrekkiesController < ApplicationController
   def edit
     @brek = Brek.find_by_id(params[:id])
     return render_not_found if @brek.blank?
+    return render_not_found(:forbidden) if @brek.user != current_user
   end
 
   def create
@@ -53,8 +57,8 @@ class BrekkiesController < ApplicationController
     params.require(:brek).permit(:message)
   end
 
-  def render_not_found
-    render plain: 'Not Found :(', status: :not_found
+  def render_not_found(status=:not_found)
+    render plain: "#{status.to_s.titleize} :(", status: status
   end
 
 end
