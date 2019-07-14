@@ -1,4 +1,6 @@
 class BrekkiesController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create]
+  
   def new
     @brek = Brek.new
   end
@@ -8,7 +10,7 @@ class BrekkiesController < ApplicationController
   end
 
   def create
-    @brek = Brek.create(brek_params)
+    @brek = current_user.breks.create(brek_params)
     if @brek.valid?
       redirect_to root_path
     else
