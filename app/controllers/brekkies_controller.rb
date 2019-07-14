@@ -1,6 +1,18 @@
 class BrekkiesController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
 
+  def update
+    @brek = Brek.find_by_id(params[:id])
+    return render_not_found if @brek.blank?
+
+    @brek.update_attributes(brek_params)
+    if @brek.valid?
+      redirect_to root_path
+    else
+      return render :edit, status: :unprocessable_entity
+    end
+  end
+
   def new
     @brek = Brek.new
   end
@@ -11,9 +23,12 @@ class BrekkiesController < ApplicationController
 
   def show
     @brek = Brek.find_by_id(params[:id])
-    if @brek.blank?
-      render plain: 'Not Found :(', status: :not_found
-    end
+    return render_not_found if @brek.blank?
+  end
+
+  def edit
+    @brek = Brek.find_by_id(params[:id])
+    return render_not_found if @brek.blank?
   end
 
   def create
@@ -29,6 +44,10 @@ class BrekkiesController < ApplicationController
 
   def brek_params
     params.require(:brek).permit(:message)
+  end
+
+  def render_not_found
+    render plain: 'Not Found :(', status: :not_found
   end
 
 end

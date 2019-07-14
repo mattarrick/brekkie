@@ -1,6 +1,42 @@
 require 'rails_helper'
 
 RSpec.describe BrekkiesController, type: :controller do
+  describe "brekkies#update action" do
+    it "should allow users to successfully update brekkies" do
+      brek = FactoryBot.create(:brek, message: "Initial Value")
+      patch :update, params: { id: brek.id, brek: { message: 'Changed' } }
+      expect(response).to redirect_to root_path
+      brek.reload
+      expect(brek.message).to eq "Changed"
+    end
+
+    it "should have http 404 error if the brekkie cannot be found" do
+      patch :update, params: { id: "YOLOSWAG", brek: { message: 'Changed' } }
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "should render the edit form with an http status of unprocessable_entity" do
+      brek = FactoryBot.create(:brek, message: "Initial Value")
+      patch :update, params: { id: brek.id, brek: { message: '' } }
+      expect(response).to have_http_status(:unprocessable_entity)
+      brek.reload
+      expect(brek.message).to eq "Initial Value"
+    end
+  end
+
+  describe "brekkies#edit action" do
+    it "should successfully show the edit form if the brekkie is found" do
+      brek = FactoryBot.create(:brek)
+      get :edit, params: { id: brek.id }
+      expect(response).to have_http_status(:success)
+    end
+
+    it "should return a 404 error if the brekkie is not found" do
+      get :edit, params: { id: 'SWAG' }
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe "brekkies#show action" do
     it "should successfully show the page if the brekkie is found" do
       brek = FactoryBot.create(:brek)
