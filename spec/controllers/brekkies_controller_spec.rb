@@ -9,6 +9,7 @@ RSpec.describe BrekkiesController, type: :controller do
       delete :destroy, params: { id: brek.id }
       expect(response).to have_http_status(:forbidden)
     end
+    
     it "shouldn't let unauthenticated users destroy a brekkie" do
       brek = FactoryBot.create(:brek)
       delete :destroy, params: { id: brek.id }

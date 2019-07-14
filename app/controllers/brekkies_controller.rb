@@ -28,7 +28,7 @@ class BrekkiesController < ApplicationController
   end
 
   def index
-
+    @brek = Brek.all
   end
 
   def show
@@ -54,7 +54,7 @@ class BrekkiesController < ApplicationController
   private
 
   def brek_params
-    params.require(:brek).permit(:message)
+    params.require(:brek).permit(:message, :picture)
   end
 
   def render_not_found(status=:not_found)

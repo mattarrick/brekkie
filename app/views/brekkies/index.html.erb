@@ -1,1 +1,8 @@
 <h1>Brekkies</h1>
+
+<% @brek.each do |brek| %>
+<div>
+  <%= brek.message %>
+  <%= image_tag brek.picture %>
+</div>
+<% end %>
