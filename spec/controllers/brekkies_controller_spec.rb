@@ -1,6 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe BrekkiesController, type: :controller do
+  describe "brekkies#destroy action" do
+    it "should allow a user to destroy a brekkie" do
+      brek = FactoryBot.create(:brek)
+      delete :destroy, params: { id: brek.id }
+      expect(response).to redirect_to root_path
+      brek = Brek.find_by_id(brek.id)
+      expect(brek).to eq nil
+    end
+
+    it "should return a 404 message if we cannot find a brekkie with the id that is specified" do
+      delete :destroy, params: { id: 'SPACEDUCK' }
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe "brekkies#update action" do
     it "should allow users to successfully update brekkies" do
       brek = FactoryBot.create(:brek, message: "Initial Value")

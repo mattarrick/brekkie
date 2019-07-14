@@ -1,6 +1,13 @@
 class BrekkiesController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
 
+  def destroy
+    @brek = Brek.find_by_id(params[:id])
+    return render_not_found if @brek.blank?
+    @brek.destroy
+    redirect_to root_path
+  end
+
   def update
     @brek = Brek.find_by_id(params[:id])
     return render_not_found if @brek.blank?
